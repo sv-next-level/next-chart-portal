@@ -17,7 +17,7 @@
     "lint": "next lint",
     "lints": "lint-staged",
     "lint:fix": "next lint --fix",
-    "preview": "next build && next start",
+    "preview": "next build && npx env-cmd -f '.env' next start",
     "release:local": "npx semantic-release --no-ci --dry-run=false",
     "prettier": "prettier .",
     "format": "npm run prettier -- --write --cache && npm run lint:fix",
