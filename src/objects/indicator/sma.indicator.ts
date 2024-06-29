@@ -15,7 +15,7 @@ export enum OHLC {
 export const createSimpleMovingAverage = (
   data: any[],
   interval: number,
-  format: OHLC
+  format: OHLC,
 ): Array<{
   time: any;
   value: number;
@@ -52,7 +52,7 @@ export const createSimpleMovingAverage = (
 export const updateSimpleMovingAverage = (
   data: any[],
   interval: number,
-  format: OHLC
+  format: OHLC,
 ): {
   time: any;
   value: number;

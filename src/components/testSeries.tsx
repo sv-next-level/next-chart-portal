@@ -1,11 +1,12 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
+
+import { PriceScale } from "@/const/chart";
 import { Chart } from "@/objects/chart";
 import { Data } from "@/objects/data/data";
 import { INDICATOR } from "@/objects/indicator";
 import { SERIES } from "@/objects/series";
-import { PriceScale } from "@/const/chart";
-import React, { useEffect, useRef, useState } from "react";
 
 const initialData = [
   ["2024-03-26T09:15:00+05:30", 59.6, 59.9, 59, 59.3, 718814],
@@ -288,7 +289,7 @@ export default function TestSeries(props: any) {
         data[2],
         data[3],
         data[4],
-        data[5]
+        data[5],
       );
     });
 

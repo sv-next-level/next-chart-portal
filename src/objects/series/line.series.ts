@@ -1,4 +1,3 @@
-import { PriceScale } from "@/const/chart";
 import {
   DeepPartial,
   IChartApi,
@@ -14,6 +13,8 @@ import {
   Time,
   WhitespaceData,
 } from "lightweight-charts";
+
+import { PriceScale } from "@/const/chart";
 
 export class LineSeries {
   private series: ISeriesApi<

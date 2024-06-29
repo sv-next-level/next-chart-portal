@@ -31,7 +31,7 @@ export class Data implements IData {
     high: string | number,
     low: string | number,
     close: string | number,
-    volume: string | number
+    volume: string | number,
   ) {
     this.time = time;
     this.open = Number(open);

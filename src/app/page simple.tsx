@@ -1,7 +1,7 @@
 "use client";
 
-import { createChart, ColorType } from "lightweight-charts";
 import React, { useEffect, useRef } from "react";
+import { ColorType, createChart } from "lightweight-charts";
 
 export const ChartComponent = (props: any) => {
   const {

@@ -1,6 +1,8 @@
 import { IChartApi } from "lightweight-charts";
+
 import { CandlestickSeries } from "./candlestick.series";
 import { LineSeries } from "./line.series";
+
 export * from "./candlestick.series";
 export * from "./line.series";
 
@@ -15,7 +17,7 @@ export const enum SERIES {
 
 export const createSeries = (
   chart: IChartApi,
-  seriesType: SERIES
+  seriesType: SERIES,
 ): CandlestickSeries | LineSeries => {
   let series: any;
 

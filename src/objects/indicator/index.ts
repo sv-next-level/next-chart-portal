@@ -1,9 +1,11 @@
 import { IChartApi } from "lightweight-charts";
-import { CandlestickSeries, LineSeries, SERIES, createSeries } from "../series";
+
+import { CandlestickSeries, createSeries, LineSeries, SERIES } from "../series";
 import {
   createSimpleMovingAverage,
   updateSimpleMovingAverage,
 } from "./sma.indicator";
+
 export * from "./sma.indicator";
 
 export const enum INDICATOR {
@@ -13,7 +15,7 @@ export const enum INDICATOR {
 export const createIndicator = (
   chart: IChartApi,
   indicatorType: INDICATOR,
-  options: any
+  options: any,
 ): CandlestickSeries | LineSeries => {
   let indicator: any;
 
@@ -23,7 +25,7 @@ export const createIndicator = (
       const smaData = createSimpleMovingAverage(
         options.data,
         options.interval,
-        options.format
+        options.format,
       );
       indicator.getSeries().setData(smaData);
       break;
@@ -38,14 +40,14 @@ export const createIndicator = (
 export const updateIndicator = (
   indicator: CandlestickSeries | LineSeries,
   indicatorType: INDICATOR,
-  options: any
+  options: any,
 ) => {
   switch (indicatorType) {
     case INDICATOR.SMA: {
       const smaData = updateSimpleMovingAverage(
         options.data.slice(-options.interval),
         options.interval,
-        options.format
+        options.format,
       );
       indicator.getSeries().update(smaData);
       break;

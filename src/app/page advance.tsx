@@ -1,6 +1,5 @@
 "use client";
 
-import { createChart } from "lightweight-charts";
 import React, {
   createContext,
   forwardRef,
@@ -12,6 +11,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { createChart } from "lightweight-charts";
 
 const Context = createContext(null);
 

@@ -1,6 +1,7 @@
 import {
   CandlestickData,
   ColorType,
+  createChart,
   CrosshairMode,
   DeepPartial,
   HorzScaleOptions,
@@ -11,12 +12,13 @@ import {
   TickMarkType,
   Time,
   TimeChartOptions,
-  createChart,
 } from "lightweight-charts";
-import { CandlestickSeries, LineSeries, SERIES, createSeries } from "./series";
+
 import { HorzAlign, PriceScale, VertAlign } from "@/const/chart";
-import { INDICATOR, createIndicator, updateIndicator } from "./indicator";
+
 import { Data } from "./data/data";
+import { createIndicator, INDICATOR, updateIndicator } from "./indicator";
+import { CandlestickSeries, createSeries, LineSeries, SERIES } from "./series";
 
 interface Indicator {
   indicator: CandlestickSeries | LineSeries;
@@ -132,7 +134,7 @@ export class Chart {
       tickMarkFormatter: (
         time: number,
         tickMarkType: TickMarkType,
-        locale: string
+        locale: string,
       ) => {
         const date: Date = new Date(time * 1000);
 
@@ -201,7 +203,7 @@ export class Chart {
   setData(data: Data[]) {
     this.data = data;
     this.chartSeries.setData(
-      this.data as CandlestickData<Time>[] & LineData<Time>[]
+      this.data as CandlestickData<Time>[] & LineData<Time>[],
     );
   }
 

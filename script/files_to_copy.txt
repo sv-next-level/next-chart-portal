@@ -1,0 +1,9 @@
+./src/shared/nextjs/.husky
+./src/shared/nextjs/.czrc
+./src/shared/nextjs/.editorconfig
+./src/shared/nextjs/.eslintignore
+./src/shared/nextjs/.eslintrc
+./src/shared/nextjs/.lintstagedrc
+./src/shared/nextjs/.prettierignore
+./src/shared/nextjs/.prettierrc
+./src/shared/nextjs/.releaserc
