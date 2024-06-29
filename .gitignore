@@ -140,3 +140,9 @@ yarn*.lock
 .prettierignore
 .prettierrc
 .releaserc
+
+# others
+components.json
+next-env.d.ts
+postcss.config.mjs
+tailwind.config.ts

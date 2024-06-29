@@ -7,3 +7,7 @@
 ./src/shared/nextjs/.prettierignore
 ./src/shared/nextjs/.prettierrc
 ./src/shared/nextjs/.releaserc
+./src/shared/nextjs/components.json
+./src/shared/nextjs/next-env.d.ts
+./src/shared/nextjs/postcss.config.mjs
+./src/shared/nextjs/tailwind.config.ts
