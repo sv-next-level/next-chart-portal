@@ -1,50 +1,17 @@
-export const SiteConfig = {
-  name: "Next Trading",
-  description: "Next level trading.",
+export type SiteConfig = typeof siteConfig;
+
+export const siteConfig = {
+  name: "Next Charts",
+  description: "Next level charts for better analysis and trading.",
+  mainNav: [
+    {
+      title: "Home",
+      href: "/",
+    },
+  ],
+  links: {
+    twitter: "https://twitter.com/shadcn",
+    github: "https://github.com/shadcn/ui",
+    docs: "https://ui.shadcn.com",
+  },
 };
-
-export const LoginLink = {
-  title: "Login",
-  href: "/login",
-  description: "Login page",
-};
-
-export const RegisterLink = {
-  title: "Register",
-  href: "/register",
-  description: "Register page",
-};
-
-export const ForgotLink = {
-  title: "Forgot",
-  href: "/forgot",
-  description: "Forgot page",
-};
-
-export const OTPLink = {
-  title: "OTP",
-  href: "/otp",
-  description: "OTP page",
-};
-
-export const PasswordLink = {
-  title: "Password",
-  href: "/password",
-  description: "Password page",
-};
-
-export const AllLinks = [
-  LoginLink,
-  RegisterLink,
-  ForgotLink,
-  PasswordLink,
-  OTPLink,
-];
-
-export enum PROCESS_MODE {
-  LOGIN = "LOGIN",
-  REGISTER = "REGISTER",
-  RESET = "RESET",
-  OTP = "OTP",
-  PASSWORD = "PASSWORD",
-}
