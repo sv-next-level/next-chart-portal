@@ -12,10 +12,20 @@ while IFS= read -r line; do
     continue
   fi
 
-  echo "File: $line"
+  # Split the line into source and destination paths
+  IFS=':' read -r source destination <<< "$line"  # Split on colon (:)
 
-  # Copy the file/folder specified in the line
-  cp -r "$line" ./
+  # Check if destination path is provided
+  if [[ -z "$destination" ]]; then
+    echo "Error: Destination path missing for '$source'"
+    continue
+  fi
+
+  echo "Copying '$source' to '$destination'"
+
+  # Copy the file/folder with appropriate destination path
+  cp -r "$source" "$destination"
+
 done < "$file_list"
 
 echo "Files and folders copied successfully!"

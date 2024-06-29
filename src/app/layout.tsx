@@ -4,30 +4,46 @@ import { Inter } from "next/font/google";
 import "@/nextjs/styles/globals.css";
 import "@/nextjs/styles/themes.css";
 
-import { SiteConfig } from "@/config/site";
+import { siteConfig } from "@/config/site";
+import { Provider as ReduxStoreProvider } from "@/nextjs/lib/redux/store";
 
-import { Toaster } from "@/components/ui/sonner";
+import { TopLoading } from "@/nextjs/components/loading";
+import { TailwindIndicator } from "@/nextjs/components/misc/tailwind-indicator";
+import { Provider as ThemeProvider } from "@/nextjs/components/themes/provider";
+import { Wrapper as ThemeWrapper } from "@/nextjs/components/themes/wrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: SiteConfig.name,
-    template: SiteConfig.name,
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
   },
-  description: SiteConfig.description,
+  description: siteConfig.description,
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout(props: Readonly<RootLayoutProps>) {
+export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {props.children}
-        <Toaster richColors position="bottom-left" />
+        <ReduxStoreProvider>
+          <ThemeWrapper>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <>
+                <TopLoading />
+                {children}
+                <TailwindIndicator />
+              </>
+            </ThemeProvider>
+          </ThemeWrapper>
+        </ReduxStoreProvider>
       </body>
     </html>
   );
