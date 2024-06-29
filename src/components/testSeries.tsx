@@ -332,8 +332,11 @@ export default function TestSeries(props: any) {
 
   return (
     <>
-      <div ref={chartContainerRef} className={`${props.className} relative`}>
-        <div className="absolute left-[8px] top-[4px] z-20">
+      <div
+        ref={chartContainerRef}
+        className={`${props.className} relative h-full`}
+      >
+        <div className="absolute left-[8px] top-[4px]">
           <div>
             <span> O</span>
             <span className={legendData?.color}>

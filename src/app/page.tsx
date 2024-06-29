@@ -1,41 +1,24 @@
-"use client";
+import * as React from "react";
 
-// import AreaSeries from "@/components/areaSeries";
-// import CandlestickSeries from "@/components/candlestickSeries";
-import TestSeries from "@/components/testSeries";
+import { Resizable } from "@/templates";
 
-export default function App() {
+export default function Home() {
   return (
-    <div className="h-screen w-screen">
-      <div className="h-[40px] bg-blue-600">Top Bar</div>
-
-      <div className="flex">
-        <div className="min-h-full min-w-[100px] bg-green-600">Left Bar</div>
-
-        <div className=" min-h-[calc(100vh-40px)] flex-1 ">
-          <TestSeries className="min-h-[calc(100vh-80px)]" />
-          <div className="h-[40px] w-full bg-blue-600">Bottom Bar</div>
-        </div>
-
-        <div className="min-h-full min-w-[100px] bg-green-600">Right Bar</div>
-      </div>
-    </div>
+    <main className="h-screen">
+      <Resizable
+        headerMinSize={60}
+        headerMaxSize={60}
+        headerDefaultSize={60}
+        leftMinSize={50}
+        leftMaxSize={200}
+        leftDefaultSize={50}
+        rightMinSize={50}
+        rightMaxSize={200}
+        rightDefaultSize={50}
+        bottomMinSize={10}
+        bottomMaxSize={200}
+        bottomDefaultSize={60}
+      />
+    </main>
   );
 }
-
-/**
-    <>
-      <div className="bg-blue-600">Top Bar</div>
-
-      <div className="flex">
-        <div className="bg-green-600">Left Bar</div>
-
-        <div>
-          <CandlestickSeries />
-          <div className="bg-red-600">Bottom Bar</div>
-        </div>
-
-        <div className="bg-green-600">Right Bar</div>
-      </div>
-    </>
- */
