@@ -19,6 +19,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@/chart/*": ["./src/shared/chart/ts/*"],
       "@/nextjs/*": ["./src/shared/nextjs/src/*"]
     }
   },
