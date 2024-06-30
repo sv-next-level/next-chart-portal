@@ -1,3 +1,6 @@
 [submodule "src/shared/nextjs"]
 	path = src/shared/nextjs
 	url = git@github.com:sv-next-level/next-util-nextjs.git
+[submodule "src/shared/chart"]
+	path = src/shared/chart
+	url = git@github.com:sv-next-level/next-util-chart.git

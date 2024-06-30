@@ -15,6 +15,7 @@ import {
 import TestSeries from "@/components/testSeries";
 import { Accounts } from "@/nextjs/components/accounts";
 import { Apps } from "@/nextjs/components/apps";
+import { Time } from "@/nextjs/components/chart/time";
 import { Settings } from "@/nextjs/components/settings";
 import { Themes } from "@/nextjs/components/themes";
 
@@ -77,17 +78,20 @@ export function Resizable(props: ResizableProps) {
                 minSize={headerMinSize}
                 maxSize={headerMaxSize}
                 defaultSize={headerDefaultSize}
-                className="flex justify-between"
               >
-                <div>header</div>
-                <div className="my-auto ml-2 mr-4 flex gap-1">
-                  <Link href="/" className="my-auto text-primary underline">
-                    Loader
-                  </Link>
-                  <Themes />
-                  <Settings />
-                  <Apps />
-                  <Accounts />
+                <div className="flex h-full justify-between gap-1 px-2">
+                  <div className="my-auto flex justify-start gap-1 overflow-auto p-px">
+                    <Time />
+                  </div>
+                  <div className="my-auto flex justify-end gap-1">
+                    <Link href="/" className="my-auto text-primary underline">
+                      Loader
+                    </Link>
+                    <Themes />
+                    <Settings />
+                    <Apps />
+                    <Accounts />
+                  </div>
                 </div>
               </ResizablePanel>
               <ResizableHandle

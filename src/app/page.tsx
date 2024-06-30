@@ -6,9 +6,9 @@ export default function Home() {
   return (
     <main className="h-screen">
       <Resizable
-        headerMinSize={60}
-        headerMaxSize={60}
-        headerDefaultSize={60}
+        headerMinSize={50}
+        headerMaxSize={50}
+        headerDefaultSize={50}
         leftMinSize={50}
         leftMaxSize={200}
         leftDefaultSize={50}
