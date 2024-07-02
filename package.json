@@ -11,7 +11,7 @@
   },
   "scripts": {
     "cm": "cz",
-    "dev": "npx env-cmd -f '.env' next dev --turbo",
+    "dev": "npx env-cmd -f '.env' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

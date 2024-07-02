@@ -12,10 +12,10 @@ import {
   ResizablePanelGroup,
 } from "@/nextjs/components/ui/resizable";
 
+import { Time } from "@/components/chart/time";
 import TestSeries from "@/components/testSeries";
 import { Accounts } from "@/nextjs/components/accounts";
 import { Apps } from "@/nextjs/components/apps";
-import { Time } from "@/nextjs/components/chart/time";
 import { Settings } from "@/nextjs/components/settings";
 import { Themes } from "@/nextjs/components/themes";
 
