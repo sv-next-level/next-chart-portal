@@ -4,7 +4,7 @@ import {
   chartTimeListStar,
   chartTimeUpdate,
   newChartTimeInitialState,
-} from "@/lib/redux/features/chart/time/list";
+} from "@/lib/redux/features/chart/time";
 import { useAppDispatch, useAppSelector } from "@/nextjs/lib/redux/store";
 
 import { ChartTime } from "@/chart/time/list";

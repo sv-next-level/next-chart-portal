@@ -14,8 +14,8 @@ const initialState = {
   chartTime: INITIAL_CHART_TIME_LIST[0],
 };
 
-export const chartTimeListSlice = createSlice({
-  name: "chartTimeList",
+export const ChartTimeSlice = createSlice({
+  name: "ChartTimeSlice",
   initialState,
   reducers: {
     chartTimeListPush: (state, action) => {
@@ -57,6 +57,6 @@ export const {
   chartTimeListPush,
   chartTimeListRemove,
   chartTimeListStar,
-} = chartTimeListSlice.actions;
+} = ChartTimeSlice.actions;
 
-export default chartTimeListSlice.reducer;
+export default ChartTimeSlice.reducer;
