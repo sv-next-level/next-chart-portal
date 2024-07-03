@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useChartTime } from "@/hooks";
 import { ChevronDownIcon } from "@/nextjs/assets";
 import { cn } from "@/nextjs/lib/utils";
@@ -17,13 +15,13 @@ import {
   TooltipTrigger,
 } from "@/nextjs/components/ui/tooltip";
 
-import { TimeAccordion } from "@/nextjs/components/chart/time/accordion";
-import { TimeAdd } from "@/nextjs/components/chart/time/add";
+import { TimeAccordion } from "@/components/chart/time/accordion";
+import { TimeAdd } from "@/components/chart/time/add";
 
 import { ChartTime, ChartTimeFormat, chartTimeFormat } from "@/chart/time/list";
 
 export function Time() {
-  const { chartTimeList, updateChartTime } = useChartTime();
+  const { currentChartTime, updateChartTime } = useChartTime();
 
   const groupAndSort = (arr: ChartTimeFormat[]): ChartTimeFormat[][] => {
     // Group by format
@@ -44,13 +42,13 @@ export function Time() {
   };
 
   const listOfList: ChartTimeFormat[][] = groupAndSort(
-    chartTimeList.list.map((item) => chartTimeFormat(item)),
+    currentChartTime.list.map((item) => chartTimeFormat(item)),
   );
 
   const starList: ChartTimeFormat[] = listOfList
     .flat()
     .filter((item) => item.star)
-    .concat(chartTimeFormat(chartTimeList.chartTime))
+    .concat(chartTimeFormat(currentChartTime.chartTime))
     .filter(
       (chartTime, index, self) =>
         index ===
@@ -63,15 +61,15 @@ export function Time() {
     <DropdownMenu>
       {starList.map((item) => {
         return (
-          <TooltipProvider key={item.short}>
+          <TooltipProvider key={item.short} delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   className={cn(
                     "px-1",
-                    chartTimeList.chartTime.time === item.time &&
-                      chartTimeList.chartTime.format === item.format
+                    currentChartTime.chartTime.time === item.time &&
+                      currentChartTime.chartTime.format === item.format
                       ? "!text-primary bg-secondary"
                       : null,
                   )}

@@ -1,5 +1,5 @@
-import chartTimeListReducer from "@/lib/redux/features/chart/time/list";
+import ChartTimeReducer from "@/lib/redux/features/chart/time";
 
 export const reducers = {
-  chartTimeList: chartTimeListReducer,
+  chartTime: ChartTimeReducer,
 };

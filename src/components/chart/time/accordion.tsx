@@ -27,7 +27,7 @@ interface TimeAccordionProps {
 
 export function TimeAccordion(props: TimeAccordionProps) {
   const {
-    chartTimeList,
+    currentChartTime,
     removeChartTimeList,
     starChartTimeList,
     updateChartTime,
@@ -52,9 +52,10 @@ export function TimeAccordion(props: TimeAccordionProps) {
                       key={chartTimeFormat.label}
                       className={cn(
                         "group flex justify-between",
-                        chartTimeList.chartTime.format ===
+                        currentChartTime.chartTime.format ===
                           chartTimeFormat.format &&
-                          chartTimeList.chartTime.time === chartTimeFormat.time
+                          currentChartTime.chartTime.time ===
+                            chartTimeFormat.time
                           ? "!text-primary bg-secondary"
                           : null,
                       )}

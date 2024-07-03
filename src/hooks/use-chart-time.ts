@@ -12,9 +12,9 @@ import { ChartTime } from "@/chart/time/list";
 export function useChartTime() {
   const dispatch = useAppDispatch();
 
-  const chartTimeList = useAppSelector((state) => state.chartTimeList);
+  const currentChartTime = useAppSelector((state) => state.chartTime);
   const pushChartTimeList = (newChartTime: ChartTime) => {
-    for (const chartTime of chartTimeList.list) {
+    for (const chartTime of currentChartTime.list) {
       if (
         chartTime.time === newChartTime.time &&
         chartTime.format === newChartTime.format
@@ -38,7 +38,7 @@ export function useChartTime() {
   };
 
   return {
-    chartTimeList,
+    currentChartTime,
     newChartTimeInitialState,
     pushChartTimeList,
     removeChartTimeList,
