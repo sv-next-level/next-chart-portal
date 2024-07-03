@@ -19,13 +19,14 @@ import {
 
 import { Wrapper as ThemeWrapper } from "@/nextjs/components/themes/wrapper";
 
+import { CHART_TIME_FORMAT } from "@/chart/time/format";
 import { ChartTimeFormat } from "@/chart/time/list";
 
-interface TimeAccordionProps {
+interface TimeListProps {
   list: ChartTimeFormat[][];
 }
 
-export function TimeAccordion(props: TimeAccordionProps) {
+export function TimeList(props: TimeListProps) {
   const {
     currentChartTime,
     removeChartTimeList,
@@ -35,7 +36,11 @@ export function TimeAccordion(props: TimeAccordionProps) {
 
   return (
     <ThemeWrapper>
-      <Accordion type="multiple" className="w-44">
+      <Accordion
+        type="multiple"
+        className="w-44"
+        defaultValue={Object.values(CHART_TIME_FORMAT)}
+      >
         {props.list.map((chartTimeFormats: ChartTimeFormat[]) => {
           return (
             <AccordionItem

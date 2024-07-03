@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useChartTime } from "@/hooks";
+import { useChartStyle } from "@/hooks";
 import { ChevronDownIcon } from "@/nextjs/assets";
 import { cn } from "@/nextjs/lib/utils";
 
@@ -17,46 +17,45 @@ import {
   TooltipTrigger,
 } from "@/nextjs/components/ui/tooltip";
 
-import { TimeAdd } from "@/components/chart/time/add";
-import { TimeList } from "@/components/chart/time/list";
+import { StyleList } from "@/components/chart/style/list";
 
-import { ChartTime, ChartTimeFormat, chartTimeFormat } from "@/chart/time/list";
+import { ChartStyle } from "@/chart/style/list";
 
-export function Time() {
-  const { currentChartTime, updateChartTime } = useChartTime();
+export function Style() {
+  const { currentChartStyle, updateChartStyle } = useChartStyle();
   const [open, setOpen] = React.useState<true | undefined>(undefined);
 
-  const groupAndSort = (arr: ChartTimeFormat[]): ChartTimeFormat[][] => {
+  const groupAndSort = (arr: ChartStyle[]): ChartStyle[][] => {
     // Group by format
-    const grouped = arr.reduce((obj: any, item: ChartTimeFormat) => {
-      if (!obj[item.format]) {
-        obj[item.format] = [];
+    const grouped = arr.reduce((obj: any, item: ChartStyle) => {
+      if (!obj[item.series]) {
+        obj[item.series] = [];
       }
-      obj[item.format].push(item);
+      obj[item.series].push(item);
       return obj;
     }, {});
 
     // Sort each group by value
     const sortedGroups = Object.keys(grouped).map((key) => {
-      return grouped[key].sort((a: ChartTime, b: ChartTime) => a.time - b.time);
+      return grouped[key].sort(
+        (a: ChartStyle, b: ChartStyle) => a.name > b.name,
+      );
     });
 
     return sortedGroups;
   };
 
-  const listOfList: ChartTimeFormat[][] = groupAndSort(
-    currentChartTime.list.map((item) => chartTimeFormat(item)),
-  );
+  const listOfList: ChartStyle[][] = groupAndSort(currentChartStyle.list);
 
-  const starList: ChartTimeFormat[] = listOfList
+  const starList: ChartStyle[] = listOfList
     .flat()
     .filter((item) => item.star)
-    .concat(chartTimeFormat(currentChartTime.chartTime))
+    .concat(currentChartStyle.chartStyle)
     .filter(
-      (chartTime, index, self) =>
+      (ChartStyle, index, self) =>
         index ===
         self.findIndex(
-          (chartTimeFormat) => chartTimeFormat.short === chartTime.short,
+          (ChartStyleFormat) => ChartStyleFormat.name === ChartStyle.name,
         ),
     );
 
@@ -66,26 +65,25 @@ export function Time() {
         <>
           {starList.map((item) => {
             return (
-              <TooltipProvider key={item.short} delayDuration={100}>
+              <TooltipProvider key={item.name} delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
                       variant="ghost"
                       className={cn(
                         "px-1",
-                        currentChartTime.chartTime.time === item.time &&
-                          currentChartTime.chartTime.format === item.format
+                        currentChartStyle.chartStyle.name === item.name
                           ? "!text-primary bg-secondary"
                           : null,
                       )}
                       onClick={() => {
-                        updateChartTime(item);
+                        updateChartStyle(item);
                       }}
                     >
-                      {item.short}
+                      <item.icon className="size-5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>{item.label}</TooltipContent>
+                  <TooltipContent>{item.name}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             );
@@ -110,24 +108,21 @@ export function Time() {
                   variant="ghost"
                   className={cn("px-1 !text-primary bg-secondary")}
                 >
-                  {chartTimeFormat(currentChartTime.chartTime).short}
+                  <currentChartStyle.chartStyle.icon className="size-5" />
                 </Button>
               </DropdownMenuTrigger>
             </TooltipTrigger>
-            <TooltipContent>
-              {chartTimeFormat(currentChartTime.chartTime).label}
-            </TooltipContent>
+            <TooltipContent>{currentChartStyle.chartStyle.name}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       )}
       <DropdownMenuContent
         align="start"
-        className="mt-2 max-h-96 overflow-auto"
+        className="mt-2 max-h-96 w-44 overflow-auto"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(undefined)}
       >
-        <TimeList list={listOfList} />
-        <TimeAdd />
+        <StyleList list={listOfList.flat()} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

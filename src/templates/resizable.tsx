@@ -12,6 +12,7 @@ import {
   ResizablePanelGroup,
 } from "@/nextjs/components/ui/resizable";
 
+import { Style } from "@/components/chart/style";
 import { Time } from "@/components/chart/time";
 import TestSeries from "@/components/testSeries";
 import { Accounts } from "@/nextjs/components/accounts";
@@ -82,6 +83,7 @@ export function Resizable(props: ResizableProps) {
                 <div className="flex h-full justify-between gap-1 px-2">
                   <div className="my-auto flex justify-start gap-1 overflow-auto p-px">
                     <Time />
+                    <Style />
                   </div>
                   <div className="my-auto flex justify-end gap-1">
                     <Link href="/" className="my-auto text-primary underline">
