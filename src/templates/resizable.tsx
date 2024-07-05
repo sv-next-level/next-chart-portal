@@ -11,6 +11,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/nextjs/components/ui/resizable";
+import { Separator } from "@/nextjs/components/ui/separator";
 
 import { Style } from "@/components/chart/style";
 import { Time } from "@/components/chart/time";
@@ -36,9 +37,11 @@ interface ResizableProps {
 }
 
 export function Resizable(props: ResizableProps) {
-  const [_window, setWindowObject] = React.useState<any>(null);
-  const screenWidth = _window?.screen.width;
-  const screenHeight = _window?.screen.height;
+  const [_window, setWindowObject] = React.useState<
+    (Window & typeof globalThis) | null
+  >(null);
+  const screenWidth = _window?.screen.width || 0;
+  const screenHeight = _window?.screen.height || 0;
 
   const headerMinSize = pixelTOPercentage(props.headerMinSize, screenHeight);
   const headerMaxSize = pixelTOPercentage(props.headerMaxSize, screenHeight);
@@ -80,15 +83,18 @@ export function Resizable(props: ResizableProps) {
                 maxSize={headerMaxSize}
                 defaultSize={headerDefaultSize}
               >
-                <div className="flex h-full justify-between gap-1 px-2">
-                  <div className="my-auto flex justify-start gap-1 overflow-auto p-px">
+                <div className="flex h-full justify-between overflow-x-scroll px-2">
+                  <div className="flex items-center justify-start space-x-2">
                     <Time />
+                    <Separator orientation="vertical" />
                     <Style />
+                    <Separator orientation="vertical" />
                   </div>
-                  <div className="my-auto flex justify-end gap-1">
-                    <Link href="/" className="my-auto text-primary underline">
+                  <div className="flex items-center justify-end space-x-1">
+                    <Link href="/" className="px-2 text-primary underline">
                       Loader
                     </Link>
+                    <Separator orientation="vertical" />
                     <Themes />
                     <Settings />
                     <Apps />
