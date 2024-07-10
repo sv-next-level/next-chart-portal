@@ -19,9 +19,6 @@ export const ChartStyleSlice = createSlice({
       }
     },
     chartStyleUpdate: (state, action) => {
-      state.chartStyle.icon = action.payload.icon;
-      state.chartStyle = action.payload;
-      state.chartStyle = action.payload;
       state.chartStyle = action.payload;
     },
   },

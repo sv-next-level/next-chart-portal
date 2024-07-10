@@ -13,6 +13,7 @@ import {
 } from "@/nextjs/components/ui/resizable";
 import { Separator } from "@/nextjs/components/ui/separator";
 
+import { Indicator } from "@/components/chart/indicator";
 import { Style } from "@/components/chart/style";
 import { Time } from "@/components/chart/time";
 import TestSeries from "@/components/testSeries";
@@ -88,6 +89,8 @@ export function Resizable(props: ResizableProps) {
                     <Time />
                     <Separator orientation="vertical" />
                     <Style />
+                    <Separator orientation="vertical" />
+                    <Indicator />
                     <Separator orientation="vertical" />
                   </div>
                   <div className="flex items-center justify-end space-x-1">
