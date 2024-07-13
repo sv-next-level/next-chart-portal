@@ -64,52 +64,58 @@ export function Time() {
     <DropdownMenu open={open}>
       {starList.length > 1 ? (
         <>
-          {starList.map((item) => {
+          {starList.map((chartTimeFormat) => {
             return (
-              <TooltipProvider key={item.short} delayDuration={100}>
+              <TooltipProvider key={chartTimeFormat.short} delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
                       variant="ghost"
                       className={cn(
                         "px-1",
-                        currentChartTime.chartTime.time === item.time &&
-                          currentChartTime.chartTime.format === item.format
+                        currentChartTime.chartTime.time ===
+                          chartTimeFormat.time &&
+                          currentChartTime.chartTime.format ===
+                            chartTimeFormat.format
                           ? "!text-primary bg-secondary"
                           : null,
                       )}
                       onClick={() => {
-                        updateChartTime(item);
+                        updateChartTime(chartTimeFormat);
                       }}
                     >
-                      {item.short}
+                      {chartTimeFormat.short}
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>{item.label}</TooltipContent>
+                  <TooltipContent>{chartTimeFormat.label}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             );
           })}
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-6 transition-all [&[data-state=open]>svg]:rotate-180 "
-            >
-              <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-              <span className="sr-only">Time</span>
-            </Button>
-          </DropdownMenuTrigger>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <DropdownMenuTrigger asChild>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="w-6 transition-all [&[data-state=open]>svg]:rotate-180 "
+                  >
+                    <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                    <span className="sr-only">Time interval</span>
+                  </Button>
+                </TooltipTrigger>
+              </DropdownMenuTrigger>
+              <TooltipContent>Time interval</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </>
       ) : (
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger asChild>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={cn("px-1 !text-primary bg-secondary")}
-                >
+                <Button variant="ghost" className={cn("px-2 !text-primary")}>
                   {chartTimeFormat(currentChartTime.chartTime).short}
                 </Button>
               </DropdownMenuTrigger>
@@ -122,7 +128,7 @@ export function Time() {
       )}
       <DropdownMenuContent
         align="start"
-        className="mt-2 max-h-96 overflow-auto"
+        className="mt-2"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(undefined)}
       >

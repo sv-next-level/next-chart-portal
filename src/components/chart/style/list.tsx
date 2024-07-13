@@ -1,4 +1,4 @@
-import { useChartStyle } from "@/hooks";
+import { useChartStyle, useUserSeries } from "@/hooks";
 import { StarIcon } from "@/nextjs/assets";
 import { cn } from "@/nextjs/lib/utils";
 
@@ -22,9 +22,10 @@ interface StyleListProps {
 export function StyleList(props: StyleListProps) {
   const { currentChartStyle, updateChartStyle, starChartStyleList } =
     useChartStyle();
+  const { currentUserSeries, updateStyle } = useUserSeries();
 
   return (
-    <ThemeWrapper>
+    <ThemeWrapper className="max-h-96 w-44 overflow-auto">
       {props.list.map((chartStyleFormat: ChartStyle) => {
         return (
           <DropdownMenuItem
@@ -39,6 +40,28 @@ export function StyleList(props: StyleListProps) {
             <div
               onClick={() => {
                 updateChartStyle(chartStyleFormat);
+                updateStyle({
+                  ...currentUserSeries.STYLE,
+                  [currentChartStyle.chartStyle.name]: {
+                    ...currentUserSeries.STYLE[
+                      currentChartStyle.chartStyle.name
+                    ],
+                    options: {
+                      ...currentUserSeries.STYLE[
+                        currentChartStyle.chartStyle.name
+                      ]?.options,
+                      visible: false,
+                    },
+                  },
+                  [chartStyleFormat.name]: {
+                    type: chartStyleFormat.series,
+                    options: {
+                      ...currentUserSeries.STYLE?.[chartStyleFormat.name]
+                        ?.options,
+                      visible: true,
+                    },
+                  },
+                });
               }}
               className="w-full"
             >

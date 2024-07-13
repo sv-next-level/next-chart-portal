@@ -14,7 +14,7 @@ import {
   WhitespaceData,
 } from "lightweight-charts";
 
-import { PriceScale } from "@/const/chart";
+import { PRICE_SCALE } from "@/chart/position";
 
 export class LineSeries {
   private series: ISeriesApi<
@@ -27,7 +27,7 @@ export class LineSeries {
   private id: string;
   private color: string;
   private lineWidth: DeepPartial<LineWidth> | undefined;
-  private priceScaleId: PriceScale;
+  private priceScaleId: PRICE_SCALE;
   private lineStyle: LineStyle;
   private title: string;
   private priceLineVisible: boolean;
@@ -36,7 +36,7 @@ export class LineSeries {
     this.id = "line";
     this.color = "#2962FF";
     this.lineWidth = 1;
-    this.priceScaleId = PriceScale.RIGHT;
+    this.priceScaleId = PRICE_SCALE.RIGHT;
     this.lineStyle = LineStyle.Solid;
     this.title = "";
     this.priceLineVisible = true;
@@ -106,11 +106,11 @@ export class LineSeries {
     return this.lineWidth;
   }
 
-  setPriceScaleId(priceScaleId: PriceScale) {
+  setPriceScaleId(priceScaleId: PRICE_SCALE) {
     this.priceScaleId = priceScaleId;
   }
 
-  getPriceScaleId(): PriceScale {
+  getPriceScaleId(): PRICE_SCALE {
     return this.priceScaleId;
   }
 

@@ -35,23 +35,22 @@ export function TimeList(props: TimeListProps) {
   } = useChartTime();
 
   return (
-    <ThemeWrapper>
+    <ThemeWrapper className="max-h-96 w-44 overflow-auto">
       <Accordion
         type="multiple"
-        className="w-44"
         defaultValue={Object.values(CHART_TIME_FORMAT)}
       >
-        {props.list.map((chartTimeFormats: ChartTimeFormat[]) => {
+        {props.list.map((chartTimeFormat: ChartTimeFormat[]) => {
           return (
             <AccordionItem
-              key={chartTimeFormats[0].format}
-              value={chartTimeFormats[0].format}
+              key={chartTimeFormat[0].format}
+              value={chartTimeFormat[0].format}
             >
               <AccordionTrigger className="my-1 p-1 text-xs opacity-50 hover:rounded-sm hover:bg-secondary hover:no-underline">
-                {chartTimeFormats[0].format}
+                {chartTimeFormat[0].format}
               </AccordionTrigger>
               <AccordionContent className="pb-1">
-                {chartTimeFormats.map((chartTimeFormat: ChartTimeFormat) => {
+                {chartTimeFormat.map((chartTimeFormat: ChartTimeFormat) => {
                   return (
                     <DropdownMenuItem
                       key={chartTimeFormat.label}

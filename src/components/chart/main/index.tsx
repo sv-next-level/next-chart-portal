@@ -1,15 +1,25 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import {
+  createChart,
+  IChartApi,
+  ISeriesApi,
+  SeriesMarker,
+  SeriesOptionsMap,
+  Time,
+  UTCTimestamp,
+} from "lightweight-charts";
 
+import { useChart, useUserSeries } from "@/hooks";
+import { initialState } from "@/lib/redux/features/chart/chart";
 import { cn } from "@/nextjs/lib/utils";
 
-import { CHART_INDICATOR_NAME } from "@/chart/indicator/name";
 import { PRICE_SCALE } from "@/chart/position";
-import { SERIES } from "@/chart/series";
 
-import { Chart } from "@/objects/chart";
 import { Data } from "@/objects/data/data";
+import { createIndicator, updateIndicator } from "@/objects/indicator";
+import { createSeries } from "@/objects/series";
 
 const initialData = [
   ["2024-03-26T09:15:00+05:30", 59.6, 59.9, 59, 59.3, 718814],
@@ -239,9 +249,9 @@ const initialData = [
   ["2024-03-28T15:25:00+05:30", 58.55, 58.9, 58.55, 58.55, 619352],
 ];
 
-const markers: any = [
+const markers: SeriesMarker<Time>[] = [
   {
-    time: 1711612800,
+    time: 1711612800 as UTCTimestamp,
     position: "belowBar",
     color: "green",
     shape: "arrowUp",
@@ -249,102 +259,41 @@ const markers: any = [
     size: 0.5,
   },
   {
-    time: 1711618500,
+    time: 1711618500 as UTCTimestamp,
     position: "aboveBar",
     color: "red",
     shape: "arrowDown",
     text: "sold @100",
+    size: 0.5,
   },
 ];
 
-export default function TestSeries() {
-  const chartContainerRef = useRef<any>();
+export default function MainChart() {
+  const chartContainerRef = useRef<any>(null);
+  const chartRef = useRef<IChartApi>();
+  const indicatorRef = useRef<any[]>([]);
+  const mainRef = useRef<ISeriesApi<keyof SeriesOptionsMap, Time>>();
+  const { chart } = useChart();
+  const { currentUserSeries } = useUserSeries();
+
   const [legendData, setLegendData] = useState<any>({
-    open: initialData[initialData.length - 1][1],
-    high: initialData[initialData.length - 1][2],
-    low: initialData[initialData.length - 1][3],
-    close: initialData[initialData.length - 1][4],
+    open: initialData[0][1],
+    high: initialData[0][2],
+    low: initialData[0][3],
+    close: initialData[0][4],
   });
 
   useEffect(() => {
+    if (!chartContainerRef.current) return;
     const handleResize = () => {
-      chart.handleResize();
+      // chartd.resize();
     };
+    let index = 10;
+    chartRef.current = createChart(chartContainerRef.current, chart);
 
-    const chart = new Chart(chartContainerRef.current, SERIES.CANDLESTICK);
+    chartRef.current.applyOptions(initialState);
 
-    // Setting the border color for the vertical axis
-    chart.setPriceScale(PRICE_SCALE.LEFT, {
-      borderColor: "pink",
-      // visible: !true,
-      // invertScale: !true,
-      // autoScale: !false,
-    });
-    function subHandler() {
-      chart.getChart().subscribeCrosshairMove((param) => {
-        if (param.time) {
-          const series = chart.getChartSeries();
-          const candleData: any = param.seriesData.get(series);
-          const color = cn(
-            `${candleData?.open > candleData?.close ? "text-red-400" : "text-green-400"}`,
-          );
-          setLegendData({
-            ...candleData,
-            color: color,
-          });
-        } else {
-          const data = chart.getChartSeries().data();
-          const candleData: any = data[data.length - 1];
-          const color = cn(
-            `${candleData?.open > candleData?.close ? "text-red-400" : "text-green-400"}`,
-          );
-          setLegendData({
-            ...candleData,
-            color: color,
-          });
-        }
-      });
-    }
-    function unsubHandler() {
-      const data = chart.getChartSeries().data();
-      const candleData: any = data[data.length - 1];
-      const color = cn(
-        `${candleData.open > candleData.close ? "text-red-400" : "text-green-400"}`,
-      );
-      setLegendData({
-        ...candleData,
-        color: color,
-      });
-    }
-
-    chart.getChartSeries().subscribeDataChanged(subHandler);
-    chart.getChartSeries().unsubscribeDataChanged(unsubHandler);
-    const profit = chart.getChartSeries().createPriceLine({
-      price: 60.0,
-      color: "#26a69a",
-      lineWidth: 2,
-      lineStyle: 1,
-      axisLabelVisible: true,
-      title: "P/L 500",
-    });
-    const loss = chart.getChartSeries().createPriceLine({
-      price: 58.0,
-      color: "#ef5350",
-      lineWidth: 2,
-      lineStyle: 1,
-      axisLabelVisible: true,
-      title: "P/L 500",
-    });
-    // chart.getChartSeries().removePriceLine(profit);
-    // console.log(chart.getChartSeries().seriesType());
-    // chart.getChart().remove();
-
-    chart.setPriceScale(PRICE_SCALE.RIGHT, {
-      // borderColor: "blue",
-      // visible: !true,
-    });
-
-    const data: any[] = initialData.map((data) => {
+    const data: Data[] = initialData.map((data) => {
       return new Data(
         new Date(data[0]).getTime() / 1000,
         data[1],
@@ -355,34 +304,91 @@ export default function TestSeries() {
       );
     });
 
-    chart.setData(data.slice(0, 10));
-    chart.setMarkers(markers);
+    for (const chartStyle of Object.values(currentUserSeries.STYLE)) {
+      if (chartStyle.options?.visible) {
+        mainRef.current = createSeries(
+          chartRef.current,
+          chartStyle.type,
+          chartStyle.options,
+        );
+        mainRef.current.setData(data.slice(0, index) as any);
+        mainRef.current.setMarkers(markers);
+      }
+    }
 
-    let index = 10;
+    for (const chartIndicator of Object.values(currentUserSeries.INDICATOR)) {
+      indicatorRef.current.push({
+        indicator: createIndicator(chartRef.current, chartIndicator.type, {
+          data: data.slice(0, index),
+          ...chartIndicator.options,
+        }),
+        options: chartIndicator.options,
+        type: chartIndicator.type,
+      });
+    }
+
+    // Setting the border color for the vertical axis
+    chartRef.current.priceScale(PRICE_SCALE.RIGHT).applyOptions({
+      borderColor: "pink",
+      visible: true,
+      invertScale: !true,
+      autoScale: !false,
+    });
+
+    chartRef.current.subscribeCrosshairMove((param) => {
+      if (param.time) {
+        const candleData = param.seriesData.values().next().value;
+        const color =
+          candleData?.open > candleData?.close ? "#ef5350" : "#26a69a";
+        setLegendData({
+          ...candleData,
+          color: color,
+        });
+      } else {
+        if (mainRef.current) {
+          const data = mainRef.current.data();
+          const candleData: any = data[data.length - 1];
+          const color =
+            candleData.open > candleData.close ? "#ef5350" : "#26a69a";
+          setLegendData({
+            ...candleData,
+            color: color,
+          });
+        }
+      }
+    });
+
     const intervalID = setInterval(() => {
       if (index >= data.length - 1) {
         clearInterval(intervalID);
         return;
       }
-      index += 1;
-      chart.updateData(data[index]);
-    }, 100);
+      if (mainRef.current) {
+        try {
+          mainRef.current?.update(data[index] as any);
 
-    chart.createIndicator(CHART_INDICATOR_NAME.MA, {
-      interval: 14,
-      format: "close",
-    });
-    chart.createIndicator(CHART_INDICATOR_NAME.MA, {
-      interval: 10,
-      format: "close",
-    });
+          index += 1;
+          indicatorRef.current.forEach((series) =>
+            updateIndicator(series.indicator, series.type, {
+              data: data.slice(0, index),
+              ...series.options,
+            }),
+          );
+        } catch (error) {
+          console.error("Error updating chart:", error);
+          // mainRef.current?.setData(data[index] as any);
+        }
+      }
+    }, 100);
 
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-      chart.getChart().remove();
+      if (chartRef.current) {
+        chartRef.current.remove();
+      }
     };
-  }, []);
+  }, [chart, currentUserSeries]);
 
   return (
     <div className="h-full">
@@ -393,20 +399,20 @@ export default function TestSeries() {
         <div className="absolute left-4 top-4 z-50">
           <div>
             <span> O</span>
-            <span className={legendData?.color}>
-              {legendData?.open.toFixed(2)}
+            <span style={{ color: legendData?.color }}>
+              {legendData?.open?.toFixed(2)}
             </span>
             <span> H</span>
-            <span className={`${legendData?.color}`}>
-              {legendData?.high.toFixed(2)}
+            <span style={{ color: legendData?.color }}>
+              {legendData?.high?.toFixed(2)}
             </span>
             <span> L</span>
-            <span className={legendData?.color}>
-              {legendData?.low.toFixed(2)}
+            <span style={{ color: legendData?.color }}>
+              {legendData?.low?.toFixed(2)}
             </span>
             <span> C</span>
-            <span className={legendData?.color}>
-              {legendData?.close.toFixed(2)}
+            <span style={{ color: legendData?.color }}>
+              {legendData?.close?.toFixed(2)}
             </span>
           </div>
         </div>

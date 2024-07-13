@@ -1,4 +1,4 @@
-import { useChartIndicator } from "@/hooks";
+import { useChartIndicator, useUserSeries } from "@/hooks";
 import { StarIcon } from "@/nextjs/assets";
 import { cn } from "@/nextjs/lib/utils";
 
@@ -28,34 +28,35 @@ interface StyleListProps {
 
 export function IndicatorList(props: StyleListProps) {
   const { starChartIndicatorList } = useChartIndicator();
+  const { createIndicator } = useUserSeries();
 
   return (
     <ThemeWrapper>
       <Command>
         <CommandInput placeholder="Search Indicator..." />
-        <CommandList>
+        <CommandList asChild>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup className="my-1">
             {props.list.map((chartIndicatorFormat: ChartIndicator) => {
               return (
                 <div
-                  className="group flex w-full rounded-sm px-2 py-0 hover:bg-secondary"
+                  className="group flex w-full rounded-sm px-1 hover:bg-secondary"
                   key={chartIndicatorFormat.name}
                 >
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger asChild>
                         <Button
                           variant="ghost"
                           className={cn(
-                            "hidden h-auto px-0 opacity-50 hover:opacity-100 group-hover:block",
+                            "hidden h-auto px-1 opacity-50 hover:opacity-100 group-hover:block",
                             chartIndicatorFormat.star
                               ? "opacity-100 block"
                               : null,
                           )}
                           onClick={() => {
                             starChartIndicatorList({
-                              name: chartIndicatorFormat.name,
+                              ...chartIndicatorFormat,
                               star: !chartIndicatorFormat.star,
                             });
                           }}
@@ -75,15 +76,21 @@ export function IndicatorList(props: StyleListProps) {
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
-                  <CommandItem
-                    className={cn(
-                      "!bg-transparent group-hover:ml-0",
-                      chartIndicatorFormat.star ? null : "ml-4",
-                    )}
-                    key={chartIndicatorFormat.name}
+                  <div
+                    onClick={() => {
+                      createIndicator(chartIndicatorFormat.options);
+                    }}
+                    className="w-full"
                   >
-                    <span>{chartIndicatorFormat.name}</span>
-                  </CommandItem>
+                    <CommandItem
+                      className={cn(
+                        "!bg-transparent !opacity-100 group-hover:ml-0",
+                        chartIndicatorFormat.star ? null : "ml-6",
+                      )}
+                    >
+                      <span>{chartIndicatorFormat.name}</span>
+                    </CommandItem>
+                  </div>
                 </div>
               );
             })}

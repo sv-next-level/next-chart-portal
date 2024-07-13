@@ -14,6 +14,7 @@ import {
 import { Separator } from "@/nextjs/components/ui/separator";
 
 import { Indicator } from "@/components/chart/indicator";
+import MainChart from "@/components/chart/main";
 import { Style } from "@/components/chart/style";
 import { Time } from "@/components/chart/time";
 import TestSeries from "@/components/testSeries";
@@ -134,7 +135,8 @@ export function Resizable(props: ResizableProps) {
                     maxSize={100 - bottomMinSize}
                     defaultSize={100 - bottomDefaultSize}
                   >
-                    <TestSeries />
+                    {/* <TestSeries /> */}
+                    <MainChart />
                   </ResizablePanel>
 
                   {bottomDefaultSize ? (

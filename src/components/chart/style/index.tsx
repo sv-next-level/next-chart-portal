@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useChartStyle } from "@/hooks";
+import { useChartStyle, useUserSeries } from "@/hooks";
 import { ChevronDownIcon } from "@/nextjs/assets";
 import { cn } from "@/nextjs/lib/utils";
 
@@ -22,6 +22,7 @@ import { StyleList } from "@/components/chart/style/list";
 import { ChartStyle } from "@/chart/style/list";
 
 export function Style() {
+  const { currentUserSeries, updateStyle } = useUserSeries();
   const { currentChartStyle, updateChartStyle } = useChartStyle();
   const [open, setOpen] = React.useState<true | undefined>(undefined);
 
@@ -63,51 +64,79 @@ export function Style() {
     <DropdownMenu open={open}>
       {starList.length > 1 ? (
         <>
-          {starList.map((item) => {
+          {starList.map((chartStyleFormat) => {
             return (
-              <TooltipProvider key={item.name} delayDuration={100}>
+              <TooltipProvider key={chartStyleFormat.name} delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
                       variant="ghost"
                       className={cn(
                         "px-1",
-                        currentChartStyle.chartStyle.name === item.name
+                        currentChartStyle.chartStyle.name ===
+                          chartStyleFormat.name
                           ? "!text-primary bg-secondary"
                           : null,
                       )}
                       onClick={() => {
-                        updateChartStyle(item);
+                        updateChartStyle(chartStyleFormat);
+                        updateStyle({
+                          ...currentUserSeries.STYLE,
+                          [currentChartStyle.chartStyle.name]: {
+                            ...currentUserSeries.STYLE[
+                              currentChartStyle.chartStyle.name
+                            ],
+                            options: {
+                              ...currentUserSeries.STYLE[
+                                currentChartStyle.chartStyle.name
+                              ]?.options,
+                              visible: false,
+                            },
+                          },
+                          [chartStyleFormat.name]: {
+                            type: chartStyleFormat.series,
+                            options: {
+                              ...currentUserSeries.STYLE?.[
+                                chartStyleFormat.name
+                              ]?.options,
+                              visible: true,
+                            },
+                          },
+                        });
                       }}
                     >
-                      <item.icon className="size-5" />
+                      <chartStyleFormat.icon className="size-5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>{item.name}</TooltipContent>
+                  <TooltipContent>{chartStyleFormat.name}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             );
           })}
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-6 transition-all [&[data-state=open]>svg]:rotate-180 "
-            >
-              <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
-              <span className="sr-only">Time</span>
-            </Button>
-          </DropdownMenuTrigger>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <DropdownMenuTrigger asChild>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="w-6 transition-all [&[data-state=open]>svg]:rotate-180 "
+                  >
+                    <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                    <span className="sr-only">Bar&apos;s style</span>
+                  </Button>
+                </TooltipTrigger>
+              </DropdownMenuTrigger>
+              <TooltipContent>Bar&apos;s style</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </>
       ) : (
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger asChild>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={cn("px-1 !text-primary bg-secondary")}
-                >
+                <Button variant="ghost" className={cn("px-2 !text-primary")}>
                   <currentChartStyle.chartStyle.icon className="size-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -118,7 +147,7 @@ export function Style() {
       )}
       <DropdownMenuContent
         align="start"
-        className="mt-2 max-h-96 w-44 overflow-auto"
+        className="mt-2"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(undefined)}
       >

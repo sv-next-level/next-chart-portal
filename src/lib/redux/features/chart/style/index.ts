@@ -4,7 +4,7 @@ import { INITIAL_CHART_STYLE_LIST } from "@/chart/style/list";
 
 const initialState = {
   list: INITIAL_CHART_STYLE_LIST,
-  chartStyle: INITIAL_CHART_STYLE_LIST[0],
+  chartStyle: INITIAL_CHART_STYLE_LIST[3],
 };
 
 export const ChartStyleSlice = createSlice({

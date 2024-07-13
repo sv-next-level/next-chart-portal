@@ -1,48 +1,48 @@
-import { IChartApi } from "lightweight-charts";
+import {
+  IChartApi,
+  ISeriesApi,
+  SeriesOptionsMap,
+  Time,
+} from "lightweight-charts";
 
-import { CandlestickSeries } from "./candlestick.series";
-import { LineSeries } from "./line.series";
+import { initialState as candlestickInitialState } from "@/lib/redux/features/chart/series/candlestick";
+import { initialState as lineInitialState } from "@/lib/redux/features/chart/series/line";
+
+import { SERIES } from "@/chart/series";
 
 export * from "./candlestick.series";
 export * from "./line.series";
 
-export const enum SERIES {
-  AREA = "AREA",
-  BAR = "BAR",
-  BASELINE = "BASELINE",
-  CANDLESTICK = "CANDLESTICK",
-  HISTOGRAM = "HISTOGRAM",
-  LINE = "LINE",
-}
-
 export const createSeries = (
   chart: IChartApi,
   seriesType: SERIES,
-): CandlestickSeries | LineSeries => {
-  let series: any;
+  style: any,
+): ISeriesApi<keyof SeriesOptionsMap, Time> => {
+  let series: ISeriesApi<keyof SeriesOptionsMap, Time>;
 
   switch (seriesType) {
     case SERIES.AREA:
-      series = chart.addAreaSeries();
-      break;
+      series = chart.addAreaSeries({ ...style });
+      return series;
     case SERIES.BAR:
-      series = chart.addBarSeries();
-      break;
+      series = chart.addBarSeries({ ...style });
+      return series;
     case SERIES.BASELINE:
-      series = chart.addBaselineSeries();
-      break;
+      series = chart.addBaselineSeries({ ...style });
+      return series;
     case SERIES.CANDLESTICK:
-      series = new CandlestickSeries(chart);
-      break;
+      series = chart.addCandlestickSeries({
+        ...candlestickInitialState,
+        ...style,
+      });
+      return series;
     case SERIES.HISTOGRAM:
-      series = chart.addHistogramSeries();
-      break;
+      series = chart.addHistogramSeries({ ...style });
+      return series;
     case SERIES.LINE:
-      series = new LineSeries(chart);
-      break;
+      series = chart.addLineSeries({ ...lineInitialState, ...style });
+      return series;
     default:
-      console.log("🚀 ~ createSeries ~ seriesType:", seriesType);
+      throw new Error(`Unsupported series type: ${seriesType}`);
   }
-
-  return series;
 };

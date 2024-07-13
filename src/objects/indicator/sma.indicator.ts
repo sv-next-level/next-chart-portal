@@ -23,12 +23,14 @@ export const createSimpleMovingAverage = (
   try {
     let index = interval - 1;
     const length = data.length + 1;
-    const results: number[] = [];
 
+    if (index < 0 || interval > length) return [];
+
+    const results: number[] = [];
     const prices = data.map((price) => price[format]);
 
     while (index < length - 1) {
-      index = index + 1;
+      index += 1;
       const intervalSlice = prices.slice(index - interval, index);
       const sum = intervalSlice.reduce((prev, curr) => prev + curr, 0);
       results.push(sum / interval);
@@ -55,17 +57,24 @@ export const updateSimpleMovingAverage = (
   format: OHLC,
 ): {
   time: any;
-  value: number;
+  value: number | undefined;
 } => {
   try {
     let index = interval - 1;
     const length = data.length + 1;
-    const results: number[] = [];
 
+    if (index < 0 || interval > length) {
+      return {
+        time: data[0].time,
+        value: undefined,
+      };
+    }
+
+    const results: number[] = [];
     const prices = data.map((price) => price[format]);
 
     while (index < length - 1) {
-      index = index + 1;
+      index += 1;
       const intervalSlice = prices.slice(index - interval, index);
       const sum = intervalSlice.reduce((prev, curr) => prev + curr, 0);
       results.push(sum / interval);
@@ -83,8 +92,8 @@ export const updateSimpleMovingAverage = (
   } catch (error) {
     console.log("🚀 ~ error", error);
     return {
-      time: null,
-      value: 0,
+      time: data[0].time,
+      value: undefined,
     };
   }
 };

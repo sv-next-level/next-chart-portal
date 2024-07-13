@@ -1,58 +1,62 @@
-import { IChartApi } from "lightweight-charts";
+import {
+  IChartApi,
+  ISeriesApi,
+  SeriesOptionsMap,
+  Time,
+} from "lightweight-charts";
 
-import { CandlestickSeries, createSeries, LineSeries, SERIES } from "../series";
+import { SERIES } from "@/chart/series";
+
 import {
   createSimpleMovingAverage,
   updateSimpleMovingAverage,
-} from "./sma.indicator";
+} from "@/objects/indicator/sma.indicator";
+import { createSeries } from "@/objects/series";
+import { CHART_INDICATOR_NAME } from "@/shared/chart/ts/indicator/name";
 
-export * from "./sma.indicator";
-
-export const enum INDICATOR {
-  SMA = "SMA",
-}
+export * from "@/objects/indicator/sma.indicator";
 
 export const createIndicator = (
   chart: IChartApi,
-  indicatorType: INDICATOR,
+  indicatorType: CHART_INDICATOR_NAME,
   options: any,
-): CandlestickSeries | LineSeries => {
-  let indicator: any;
+): ISeriesApi<keyof SeriesOptionsMap, Time> => {
+  let indicator: ISeriesApi<keyof SeriesOptionsMap, Time>;
 
   switch (indicatorType) {
-    case INDICATOR.SMA: {
-      indicator = createSeries(chart, SERIES.LINE);
+    case CHART_INDICATOR_NAME.MA: {
+      indicator = createSeries(chart, SERIES.LINE, options);
       const smaData = createSimpleMovingAverage(
         options.data,
         options.interval,
         options.format,
       );
-      indicator.getSeries().setData(smaData);
+      indicator.setData(smaData);
       break;
     }
     default:
-      console.log("🚀 ~ createIndicator ~ indicatorType:", indicatorType);
+      throw new Error(`Unsupported indicator type: ${indicatorType}`);
   }
 
   return indicator;
 };
 
 export const updateIndicator = (
-  indicator: CandlestickSeries | LineSeries,
-  indicatorType: INDICATOR,
+  indicator: ISeriesApi<keyof SeriesOptionsMap, Time>,
+  indicatorType: CHART_INDICATOR_NAME,
   options: any,
-) => {
+): void => {
   switch (indicatorType) {
-    case INDICATOR.SMA: {
+    case CHART_INDICATOR_NAME.MA: {
       const smaData = updateSimpleMovingAverage(
         options.data.slice(-options.interval),
         options.interval,
         options.format,
       );
-      indicator.getSeries().update(smaData);
+      indicator.update(smaData);
       break;
     }
     default:
-      console.log("🚀 ~ updateIndicator ~ indicatorType:", indicatorType);
+      throw new Error(`Unsupported indicator type: ${indicatorType}`);
   }
 };

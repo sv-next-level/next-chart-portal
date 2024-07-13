@@ -45,10 +45,10 @@ export function Indicator() {
               }}
             >
               <SquareFunctionIcon />
-              <span className="sr-only">Indicator</span>
+              <span className="sr-only">Indicators</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Indicator</TooltipContent>
+          <TooltipContent>Indicators</TooltipContent>
         </Tooltip>
       </TooltipProvider>
       <CommandDialog open={open} onOpenChange={setOpen}>
